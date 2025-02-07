@@ -18,6 +18,7 @@
 | OPLUS_LINEAGE_TOUCH_HAL | USE_OPLUSTOUCH | Use and interface with stock OplusTouch | false |
 | OPLUS_LINEAGE_VIBRATOR_HAL | INCLUDE_DIR | Device specific include dir path | |
 | OPLUS_LINEAGE_VIBRATOR_HAL | USE_EFFECT_STREAM | Enable effect stream feature | false |
+| OPLUS_SENSORS_FUSIONLIGHT | BACKEND_SUBHAL_LIB_NAME | FusionLight Sensors SubHAL backend library name | |
 
 When neither `HTPR_ENABLE_NODE` nor `HTPR_ENABLE_VALUE` is set, HighTouchPollingRate
 keeps automatic node detection and uses `sys.touch.report_rate` (default mode `3`).
