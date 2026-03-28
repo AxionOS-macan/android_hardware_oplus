@@ -18,7 +18,8 @@ constexpr int DOUBLE_TAP_GESTURE = 1 << 1;
 constexpr int DOUBLE_TAP_ENABLE_NODE = 1;
 constexpr int DOUBLE_TAP_INDEP_NODE = 21;
 constexpr int GAME_SWITCH_ENABLE_NODE = 26;
-constexpr int REPORT_RATE_MODE_NODE = 182;
+constexpr int REPORT_RATE_NODE = 182;
+constexpr int REPORT_RATE_MODE_NODE = REPORT_RATE_NODE;
 constexpr int HIGH_FRAME_ENABLE_NODE = 184;
 constexpr int GLOVE_MODE_ENABLE_NODE = 192;
 
