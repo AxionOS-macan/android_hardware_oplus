@@ -24,6 +24,20 @@ constexpr const char* kGameSwitchEnablePath = "/proc/touchpanel/game_switch_enab
 constexpr const char* kTouchReportRateProperty = "sys.touch.report_rate";
 constexpr int kDefaultReportRateMode = 3;
 
+// Explicit Soong settings override automatic node detection and the rate property.
+#if defined(HTPR_ENABLE_NODE) || defined(HTPR_ENABLE_VALUE)
+constexpr bool kUseConfiguredHtpr = true;
+#else
+constexpr bool kUseConfiguredHtpr = false;
+#endif
+
+#ifndef HTPR_ENABLE_NODE
+#define HTPR_ENABLE_NODE OplusTouchConstants::GAME_SWITCH_ENABLE_NODE
+#endif
+#ifndef HTPR_ENABLE_VALUE
+#define HTPR_ENABLE_VALUE "1"
+#endif
+
 bool parseEnabled(const std::string& value) {
     if (value.empty()) {
         return false;
@@ -75,15 +89,20 @@ ndk::ScopedAStatus HighTouchPollingRate::getEnabled(bool* _aidl_return) {
     std::string value;
 
     if (mOplusTouch) {
-        int supported = 0;
-        mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                        OplusTouchConstants::HIGH_FRAME_ENABLE_NODE, &supported);
-        if (supported == 1) {
-            mOplusTouch->touchReadNodeFile(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                           OplusTouchConstants::HIGH_FRAME_ENABLE_NODE, &value);
-        } else {
-            mOplusTouch->touchReadNodeFile(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                           OplusTouchConstants::GAME_SWITCH_ENABLE_NODE, &value);
+        int node = HTPR_ENABLE_NODE;
+        if (!kUseConfiguredHtpr) {
+            int supported = 0;
+            mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
+                                            OplusTouchConstants::HIGH_FRAME_ENABLE_NODE,
+                                            &supported);
+            node = supported == 1 ? OplusTouchConstants::HIGH_FRAME_ENABLE_NODE
+                                  : OplusTouchConstants::GAME_SWITCH_ENABLE_NODE;
+        }
+        ndk::ScopedAStatus status =
+                mOplusTouch->touchReadNodeFile(OplusTouchConstants::DEFAULT_TP_IC_ID, node, &value);
+        if (!status.isOk()) {
+            LOG(ERROR) << "Failed to read current AIDL HighTouchPollingRate state";
+            return ndk::ScopedAStatus::fromExceptionCode(EX_UNSUPPORTED_OPERATION);
         }
     } else if (!ReadFileToString(kGameSwitchEnablePath, &value)) {
         LOG(ERROR) << "Failed to read current HighTouchPollingRate state";
@@ -96,36 +115,33 @@ ndk::ScopedAStatus HighTouchPollingRate::getEnabled(bool* _aidl_return) {
 
 ndk::ScopedAStatus HighTouchPollingRate::setEnabled(bool enable) {
     if (mOplusTouch) {
-        int aidl_return = 0;
-        int supported = 0;
-        const int mode =
-                enable ? android::base::GetIntProperty(kTouchReportRateProperty,
-                                                       kDefaultReportRateMode)
-                       : 0;
-        mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                        OplusTouchConstants::REPORT_RATE_MODE_NODE, &supported);
-        if (supported == 1) {
-            mOplusTouch->touchWriteNodeFile(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                            OplusTouchConstants::REPORT_RATE_MODE_NODE,
-                                            std::to_string(mode), &aidl_return);
-            if (aidl_return < 0) {
-                LOG(ERROR) << "Failed to write HighTouchPollingRate report rate mode " << mode;
-                return ndk::ScopedAStatus::fromExceptionCode(EX_UNSUPPORTED_OPERATION);
+        int node = HTPR_ENABLE_NODE;
+        std::string value = enable ? HTPR_ENABLE_VALUE : "0";
+        if (!kUseConfiguredHtpr) {
+            int supported = 0;
+            const int mode = enable ? android::base::GetIntProperty(kTouchReportRateProperty,
+                                                                    kDefaultReportRateMode)
+                                    : 0;
+            mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
+                                            OplusTouchConstants::REPORT_RATE_MODE_NODE, &supported);
+            if (supported == 1) {
+                node = OplusTouchConstants::REPORT_RATE_MODE_NODE;
+                value = std::to_string(mode);
+            } else {
+                mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
+                                                OplusTouchConstants::HIGH_FRAME_ENABLE_NODE,
+                                                &supported);
+                node = supported == 1 ? OplusTouchConstants::HIGH_FRAME_ENABLE_NODE
+                                      : OplusTouchConstants::GAME_SWITCH_ENABLE_NODE;
+                value = supported == 1 ? (enable ? "1" : "0") : getLegacyReportRateValue(mode);
             }
-            LOG(INFO) << "Wrote HighTouchPollingRate report rate mode " << mode;
-            return ndk::ScopedAStatus::ok();
         }
 
-        mOplusTouch->isTouchNodeSupport(OplusTouchConstants::DEFAULT_TP_IC_ID,
-                                        OplusTouchConstants::HIGH_FRAME_ENABLE_NODE, &supported);
-        mOplusTouch->touchWriteNodeFile(
-                OplusTouchConstants::DEFAULT_TP_IC_ID,
-                supported == 1 ? OplusTouchConstants::HIGH_FRAME_ENABLE_NODE
-                               : OplusTouchConstants::GAME_SWITCH_ENABLE_NODE,
-                supported == 1 ? (enable ? "1" : "0") : getLegacyReportRateValue(mode),
-                &aidl_return);
-        if (aidl_return < 0) {
-            LOG(ERROR) << "Failed to write HighTouchPollingRate state";
+        int aidl_return = 0;
+        ndk::ScopedAStatus status = mOplusTouch->touchWriteNodeFile(
+                OplusTouchConstants::DEFAULT_TP_IC_ID, node, value, &aidl_return);
+        if (!status.isOk() || aidl_return < 0) {
+            LOG(ERROR) << "Failed to write AIDL HighTouchPollingRate state";
             return ndk::ScopedAStatus::fromExceptionCode(EX_UNSUPPORTED_OPERATION);
         }
     } else if (!WriteStringToFile(enable ? "1" : "0", kGameSwitchEnablePath, true)) {
