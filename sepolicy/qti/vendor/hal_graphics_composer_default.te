@@ -1,5 +1,9 @@
 binder_call(hal_graphics_composer_default, hal_graphics_composer_default)
 
+dontaudit servicemanager hal_graphics_composer_default:binder call;
+
+dontaudit servicemanager vendor_hal_poweroptservice_qti:binder call;
+
 add_service(hal_graphics_composer_default, hal_display_iris_aidl_service)
 add_service(hal_graphics_composer_default, hal_oplus_cwb_aidl_service)
 add_service(hal_graphics_composer_default, hal_oplus_displaycolor_aidl_service)

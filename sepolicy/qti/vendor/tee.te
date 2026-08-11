@@ -2,6 +2,9 @@ allow tee boot_block_device:blk_file r_file_perms;
 allow tee vendor_gpt_block_device:blk_file r_file_perms;
 allow tee vendor_xbl_block_device:blk_file r_file_perms;
 
+allow tee vendor_bsg_device:chr_file rw_file_perms;
+allow tee vendor_ufs_lun4_bsg_device:chr_file rw_file_perms;
+
 allow tee vendor_persist_fingerprint_file:dir create_dir_perms;
 allow tee vendor_persist_fingerprint_file:file create_file_perms;
 

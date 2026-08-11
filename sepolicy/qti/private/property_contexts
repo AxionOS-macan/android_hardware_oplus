@@ -10,7 +10,36 @@ oplus.autotest.                u:object_r:exported_system_prop:s0
 persist.sys.oplus.autotest.    u:object_r:exported_system_prop:s0
 
 # Bluetooth
-persist.bluetooth.a2dp_aac_abr.enable   u:object_r:exported_bluetooth_prop:s0
+bluetooth.hfp.swb.supported                  u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.a2dp.lhdc                  u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.a2dp_aac_abr.enable        u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.absvolume_support          u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.airpods_support            u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.avrcp.force_error_to_pause u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.bluetooth_asd_enable       u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.bluetooth_version          u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.choppy_heal.feature_mask   u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.current.scanmode.iac       u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.dc_sar.support             u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.dc_sar.version             u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.default.power_level        u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.disableabsvol              u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.disableinbandringing       u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.gamemode                   u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.hfp_available_guard        u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.hpm.feature_mask           u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.only_print_to_file_when_prevision u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.power.stats.enable         u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.rc.drop_auto_play          u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.rc.drop_auto_play_ex       u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.shortcut_action.maxconns   u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.smart_audio.delay_report_ext u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.smart_audio.feature_mask u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.spatial_audio_support    u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.support.sar              u:object_r:exported_bluetooth_prop:s0
+persist.bluetooth.testmonitor              u:object_r:exported_bluetooth_prop:s0
+persist.vendor.btstack.aac_frm_ctl.enabled u:object_r:exported_bluetooth_prop:s0
+persist.vendor.btstack.enable.gatt_robust_caching u:object_r:exported_bluetooth_prop:s0
 persist.sys.bt.a2dp.pendingtime    u:object_r:exported_system_prop:s0
 
 # Camera
@@ -23,6 +52,8 @@ persist.sys.camera.lao.enable    u:object_r:exported_system_prop:s0
 ro.camera.res.                   u:object_r:exported_system_prop:s0
 ro.camera.req.                   u:object_r:exported_system_prop:s0
 ro.hardware.chipname             u:object_r:exported_system_prop:s0
+ro.chipname                      u:object_r:exported_system_prop:s0
+ro.mediatek.platform             u:object_r:exported_system_prop:s0
 ro.oppo.market.                  u:object_r:exported_system_prop:s0
 
 # Display

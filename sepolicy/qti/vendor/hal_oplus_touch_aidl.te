@@ -35,5 +35,8 @@ rw_dir_file(hal_oplus_touch_aidl, vendor_sysfs_usb_supply)
 
 set_prop(hal_oplus_touch_aidl, system_oplus_touch_prop)
 set_prop(hal_oplus_touch_aidl, vendor_oplus_touch_prop)
+get_prop(hal_oplus_touch_aidl, system_oplus_touch_prop)
+get_prop(hal_oplus_touch_aidl, vendor_oplus_touch_prop)
+get_prop(hal_oplus_touch_aidl, exported_system_prop)
 
 allow hal_oplus_touch_aidl self:capability sys_nice;
