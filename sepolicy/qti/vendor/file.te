@@ -21,6 +21,9 @@ type mdmfeature_device, dev_type;
 type mdm_feature_exec, exec_type, vendor_file_type, file_type;
 type vendor_proc_engineer, fs_type, proc_type;
 
+# Face unlock
+type face_picture_file, file_type, data_file_type;
+
 # Fingerprint
 type vendor_persist_fingerprint_file, file_type;
 type vendor_proc_fingerprint, fs_type, proc_type;
