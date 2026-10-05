@@ -216,3 +216,5 @@
 /dev/ufcs_dev                         u:object_r:wlchg_device:s0
 /dev/wlchg                            u:object_r:wlchg_device:s0
 /dev/wls_dev                          u:object_r:wlchg_device:s0
+# Dolby Vision
+/(odm|vendor/odm)/bin/hw/dvs-aidl-service    u:object_r:hal_dolby_dvs_aidl_exec:s0

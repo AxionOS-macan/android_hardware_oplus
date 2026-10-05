@@ -71,3 +71,5 @@ vendor.oplus.hardware.touch.IOplusTouch/default    u:object_r:hal_oplus_touch_ai
 
 # URCC
 vendor.oplus.hardware.urcc.IUrcc/default    u:object_r:hal_oplus_urcc_aidl_service:s0
+# Dolby Vision
+vendor.dolby.dvs.IDvs/default    u:object_r:hal_dolby_dvs_aidl_service:s0
